@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Waitlings</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <header>
+      <div class="brand">
+        <span class="logo" id="logo" aria-hidden="true"></span>
+        <div>
+          <h1>Waitlings</h1>
+          <p>Company while the AI thinks</p>
+        </div>
+      </div>
+      <label class="switch" title="Turn Waitlings on or off">
+        <input type="checkbox" id="enabled" />
+        <span></span>
+      </label>
+    </header>
+
+    <main id="main">
+      <section class="preview" aria-label="Preview">
+        <span class="pv-art" id="pvArt" aria-hidden="true"></span>
+        <span class="pv-text" id="pvText"></span>
+      </section>
+
+      <section>
+        <h2>Companion</h2>
+        <div class="tabs" id="tabs" role="tablist"></div>
+        <div class="grid" id="grid"></div>
+      </section>
+
+      <section>
+        <div class="row">
+          <h2>My phrases</h2>
+          <label class="switch small" title="Swap the filler status word for these phrases">
+            <input type="checkbox" id="swapText" />
+            <span></span>
+          </label>
+        </div>
+        <p class="hint">Shown in place of the filler status word. One per line.</p>
+        <textarea id="phrases" rows="3" spellcheck="false" aria-label="Custom phrases, one per line"></textarea>
+        <button class="link" id="reset" type="button">Restore default phrases</button>
+      </section>
+
+      <section>
+        <h2>Sites</h2>
+        <div id="sites"></div>
+      </section>
+    </main>
+
+    <footer>Changes apply instantly. Nothing leaves your browser.</footer>
+
+    <script src="../core/defaults.js"></script>
+    <script src="../core/themes.js"></script>
+    <script src="../adapters/claude.js"></script>
+    <script src="popup.js"></script>
+  </body>
+</html>
