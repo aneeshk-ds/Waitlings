@@ -65,7 +65,7 @@ main.off {
 }
 
 section {
-  margin-bottom: 13px;
+  margin-bottom: 11px;
 }
 
 h2 {
@@ -122,6 +122,14 @@ h2 {
   white-space: nowrap;
 }
 
+.pv-time {
+  flex: none;
+  margin-left: auto;
+  color: var(--muted);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
 .pv-text.swap {
   animation: rise 0.4s ease;
 }
@@ -131,6 +139,19 @@ h2 {
     opacity: 0;
     transform: translateY(4px);
   }
+}
+
+[hidden] {
+  display: none !important;
+}
+
+/* Top-level views */
+.views {
+  margin: -3px 0 12px;
+}
+
+.views button {
+  font-weight: 600;
 }
 
 /* Pack tabs */
@@ -206,6 +227,90 @@ h2 {
   color: var(--text);
   font-size: 11px;
   white-space: pre;
+}
+
+/* Size control */
+section.row h2 {
+  margin: 0;
+}
+
+.seg {
+  display: flex;
+  gap: 4px;
+  padding: 3px;
+  border-radius: 9px;
+  background: var(--panel);
+}
+
+.seg button {
+  min-width: 62px;
+  padding: 5px 0;
+  border: 0;
+  border-radius: 6px;
+  background: none;
+  color: var(--muted);
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.seg button[aria-checked='true'] {
+  background: var(--accent);
+  color: var(--bg);
+  font-weight: 600;
+}
+
+/* Option cards */
+.card {
+  padding: 9px 12px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--panel);
+}
+
+.card .row {
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.card strong {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.card .hint {
+  margin: 2px 0 0;
+}
+
+.card textarea {
+  margin-top: 9px;
+  background: var(--bg);
+}
+
+.strip {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 4px;
+  margin-top: 8px;
+}
+
+.act {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  color: var(--muted);
+  font-size: 10.5px;
+}
+
+.act span {
+  width: 26px;
+  height: 26px;
+  background: center / contain no-repeat;
+}
+
+.strip.off {
+  opacity: 0.35;
 }
 
 /* Phrases */

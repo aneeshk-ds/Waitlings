@@ -9,7 +9,6 @@
   let settings = await W.load();
   let openPack = W.themeById(settings.theme).pack;
   let saveTimer = null;
-  const frameTimers = new Set();
 
   const save = () => W.save(settings);
   const saveSoon = () => {
@@ -19,11 +18,8 @@
 
   // Draw a theme into an element: animated SVG as a background, or cycling text.
   function paint(el, theme) {
-    if (el._timer) {
-      clearInterval(el._timer);
-      frameTimers.delete(el._timer);
-      el._timer = null;
-    }
+    clearInterval(el._timer);
+    el._timer = null;
     el.textContent = '';
     el.style.backgroundImage = '';
     el.classList.toggle('text', theme.type === 'text');
@@ -37,8 +33,18 @@
       i = (i + 1) % theme.frames.length;
       el.textContent = theme.frames[i];
     }, theme.interval);
-    frameTimers.add(el._timer);
   }
+
+  /* ---------- Views ---------- */
+
+  function showView(name) {
+    for (const b of $('views').children) b.setAttribute('aria-selected', String(b.dataset.view === name));
+    $('view-look').hidden = name !== 'look';
+    $('view-options').hidden = name !== 'options';
+  }
+  for (const b of $('views').children) b.addEventListener('click', () => showView(b.dataset.view));
+
+  /* ---------- Companion view ---------- */
 
   function renderTabs() {
     $('tabs').replaceChildren(
@@ -84,27 +90,82 @@
     );
   }
 
-  // Preview: the selected companion beside a rotating phrase.
-  let previewTimer = null;
+  function renderSize() {
+    $('size').replaceChildren(
+      ...Object.entries(W.SIZES).map(([key, size]) => {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.role = 'radio';
+        b.textContent = size.name;
+        b.setAttribute('aria-checked', String(key === (settings.size || 'm')));
+        b.addEventListener('click', () => {
+          settings.size = key;
+          save();
+          renderSize();
+          renderPreview();
+        });
+        return b;
+      })
+    );
+  }
+
+  /* ---------- Preview: companion, rotating phrase, counter ---------- */
+
+  let phraseTimer = null;
+  let clockTimer = null;
   function renderPreview() {
-    paint($('pvArt'), W.themeById(settings.theme));
-    clearInterval(previewTimer);
+    const art = $('pvArt');
+    const theme = W.themeById(settings.theme);
+    const size = W.SIZES[settings.size] || W.SIZES.m;
+    paint(art, theme);
+    art.style.width = art.style.height = theme.type === 'svg' ? size.px + 'px' : '';
+    art.style.fontSize = theme.type === 'text' ? 14 * size.em + 'px' : '';
+
+    clearInterval(phraseTimer);
     const text = $('pvText');
     const phrases = settings.swapText ? W.cleanPhrases(settings.phrases) : [];
-    if (!phrases.length) {
-      text.textContent = 'The site keeps its own status text';
-      return;
-    }
-    let i = 0;
-    const show = () => {
-      text.textContent = phrases[i % phrases.length];
+    if (phrases.length) {
+      let i = 0;
+      const show = () => {
+        text.textContent = phrases[i % phrases.length];
+        text.classList.remove('swap');
+        void text.offsetWidth; // restart the animation
+        text.classList.add('swap');
+        i++;
+      };
+      show();
+      phraseTimer = setInterval(show, 2600);
+    } else {
       text.classList.remove('swap');
-      void text.offsetWidth; // restart the animation
-      text.classList.add('swap');
-      i++;
-    };
-    show();
-    previewTimer = setInterval(show, 2600);
+      text.textContent = 'The site keeps its own status text';
+    }
+
+    clearInterval(clockTimer);
+    const time = $('pvTime');
+    time.textContent = '';
+    if (settings.timer) {
+      const started = Date.now();
+      const draw = () => (time.textContent = W.formatElapsed(Date.now() - started + 1000));
+      draw();
+      clockTimer = setInterval(draw, 1000);
+    }
+  }
+
+  /* ---------- Options view ---------- */
+
+  function renderActivities() {
+    $('acts').classList.toggle('off', !settings.adaptive);
+    if ($('acts').childElementCount) return;
+    $('acts').append(
+      ...W.activities.map((activity) => {
+        const item = document.createElement('div');
+        item.className = 'act';
+        const art = document.createElement('span');
+        art.style.backgroundImage = W.iconUrl(activity);
+        item.append(art, activity.name);
+        return item;
+      })
+    );
   }
 
   function renderSites() {
@@ -137,25 +198,29 @@
   function renderControls() {
     $('enabled').checked = settings.enabled;
     $('main').classList.toggle('off', !settings.enabled);
+    $('adaptive').checked = settings.adaptive;
+    $('timer').checked = settings.timer;
     $('swapText').checked = settings.swapText;
     $('phrases').disabled = !settings.swapText;
+    renderActivities();
   }
+
+  // Bind a checkbox to a boolean setting.
+  const bindSwitch = (id, key) =>
+    $(id).addEventListener('change', (e) => {
+      settings[key] = e.target.checked;
+      save();
+      renderControls();
+      renderPreview();
+    });
 
   // Header logo is the default companion.
   $('logo').style.backgroundImage = W.iconUrl(W.themeById('mochi'));
 
-  $('enabled').addEventListener('change', (e) => {
-    settings.enabled = e.target.checked;
-    save();
-    renderControls();
-  });
-
-  $('swapText').addEventListener('change', (e) => {
-    settings.swapText = e.target.checked;
-    save();
-    renderControls();
-    renderPreview();
-  });
+  bindSwitch('enabled', 'enabled');
+  bindSwitch('adaptive', 'adaptive');
+  bindSwitch('timer', 'timer');
+  bindSwitch('swapText', 'swapText');
 
   $('phrases').value = W.cleanPhrases(settings.phrases).join('\n');
   $('phrases').addEventListener('input', (e) => {
@@ -174,6 +239,7 @@
   renderControls();
   renderTabs();
   renderGrid();
+  renderSize();
   renderPreview();
   renderSites();
 })();

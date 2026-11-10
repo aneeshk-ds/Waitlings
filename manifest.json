@@ -1,9 +1,11 @@
 {
   "manifest_version": 3,
   "name": "Waitlings",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Swaps the loading indicator in AI chat apps for small animated companions and your own phrases.",
-  "permissions": ["storage"],
+  "permissions": [
+    "storage"
+  ],
   "icons": {
     "16": "icons/icon16.png",
     "48": "icons/icon48.png",
@@ -19,10 +21,13 @@
   },
   "content_scripts": [
     {
-      "matches": ["https://claude.ai/*"],
+      "matches": [
+        "https://claude.ai/*"
+      ],
       "js": [
         "src/core/defaults.js",
         "src/core/themes.js",
+        "src/core/activities.js",
         "src/core/css.js",
         "src/adapters/claude.js",
         "src/core/engine.js"

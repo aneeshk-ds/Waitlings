@@ -6,15 +6,17 @@
  * edited, so the site's framework cannot be confused by foreign nodes and a
  * re-render cannot remove the replacement.
  *
- * Runtime values arrive through three custom properties set by the engine:
- *   --wl-icon    url() of the animated SVG (svg themes)
+ * Runtime values arrive through custom properties set by the engine:
+ *   --wl-icon    url() of the animated SVG (svg themes and activity icons)
  *   --wl-frame   current text frame (text themes)
  *   --wl-phrase  current custom phrase
+ *   --wl-time    elapsed time, for example "0:42"
  */
 (() => {
   const W = globalThis.Waitlings;
 
   W.buildCss = (adapter, theme, opts = {}) => {
+    const size = W.SIZES[opts.size] || W.SIZES.m;
     const mark = `:is(${adapter.mark})`;
     const rules = [
       // Let the slot grow to fit the replacement, and hide what was in it.
@@ -25,13 +27,21 @@
     if (theme.type === 'text') {
       rules.push(
         `${mark}::after{content:var(--wl-frame,"");display:block;flex:none;visibility:visible;` +
-          `min-width:${theme.width || 6}em;white-space:pre;font:inherit;line-height:1;color:inherit}`
+          `min-width:${theme.width || 6}em;white-space:pre;font:inherit;font-size:${size.em}em;line-height:1;color:inherit}`
       );
     } else {
+      // The negative margin keeps a tall icon from stretching the row.
       rules.push(
         `${mark}::after{content:"";display:block;flex:none;visibility:visible;` +
-          'width:26px;height:26px;margin-block:-4px;' +
+          `width:${size.px}px;height:${size.px}px;margin-block:-${Math.round(size.px * 0.3)}px;` +
           'background:var(--wl-icon) center/contain no-repeat}'
+      );
+    }
+
+    if (opts.timer && adapter.row) {
+      rules.push(
+        `:is(${adapter.row})::after{content:var(--wl-time,"");flex:none;align-self:center;` +
+          'margin-inline-start:.4em;font-size:.85em;font-variant-numeric:tabular-nums;opacity:.55;white-space:nowrap}'
       );
     }
 

@@ -51,9 +51,12 @@
     type: 'svg',
     svg: svg(
       '0 0 32 32',
-      `.b{animation:sq 1.2s ease-in-out infinite;transform-origin:16px 28px}${EYE}` +
-        `@keyframes sq{0%,100%{transform:scale(1,1)}50%{transform:scale(1.08,.88)}}${BLINK}`,
-      '<g class="b">' +
+      `.b{animation:sq 1s ease-in-out infinite;transform-origin:16px 28px}${EYE}` +
+        '.s{animation:sh 1s ease-in-out infinite;transform-box:fill-box;transform-origin:center}' +
+        '@keyframes sq{0%,100%{transform:translateY(0) scale(1.12,.84)}35%{transform:translateY(-4px) scale(.92,1.1)}55%{transform:translateY(-5px) scale(1,1)}82%{transform:translateY(0) scale(1,1)}}' +
+        `@keyframes sh{0%,82%,100%{transform:scaleX(1);opacity:.32}45%{transform:scaleX(.6);opacity:.16}}${BLINK}`,
+      '<ellipse class="s" cx="16" cy="29.6" rx="8" ry="1.2" fill="#3ddc97"/>' +
+        '<g class="b">' +
         '<path d="M5 20c0-8 4.5-13 11-13s11 5 11 13c0 5-4 8-11 8S5 25 5 20z" fill="#3ddc97"/>' +
         '<ellipse class="e" cx="12" cy="18" rx="1.6" ry="2.2" fill="#0b2b20"/>' +
         '<ellipse class="e" cx="20" cy="18" rx="1.6" ry="2.2" fill="#0b2b20"/>' +
@@ -71,8 +74,8 @@
     type: 'svg',
     svg: svg(
       '0 0 32 32',
-      `.h{animation:t 1.6s ease-in-out infinite;transform-origin:16px 27px}${EYE}` +
-        `@keyframes t{0%,100%{transform:rotate(-5deg)}50%{transform:rotate(5deg)}}${BLINK}`,
+      `.h{animation:t 1.3s ease-in-out infinite;transform-origin:16px 27px}${EYE}` +
+        `@keyframes t{0%,100%{transform:rotate(-10deg) translateY(0)}25%,75%{transform:rotate(0deg) translateY(-1.5px)}50%{transform:rotate(10deg) translateY(0)}}${BLINK}`,
       '<g class="h">' +
         '<path d="M6 6l2.5 10L15 10.5z" fill="#f5a524"/><path d="M26 6l-2.5 10L17 10.5z" fill="#f5a524"/>' +
         '<path d="M8 8.5l1.3 5 3.2-2.6z" fill="#ffb8c0"/><path d="M24 8.5l-1.3 5-3.2-2.6z" fill="#ffb8c0"/>' +
@@ -96,7 +99,7 @@
       '.g{animation:f 1.8s ease-in-out infinite}' +
         '.s{animation:s 1.8s ease-in-out infinite;transform-box:fill-box;transform-origin:center}' +
         '.p{animation:l 3s ease-in-out infinite}' +
-        '@keyframes f{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}' +
+        '@keyframes f{0%,100%{transform:translate(-1.5px,0)}50%{transform:translate(1.5px,-4px)}}' +
         '@keyframes s{0%,100%{transform:scaleX(1);opacity:.4}50%{transform:scaleX(.7);opacity:.22}}' +
         '@keyframes l{0%,40%,100%{transform:translateX(0)}50%,90%{transform:translateX(1.5px)}}',
       '<ellipse class="s" cx="16" cy="29.5" rx="7" ry="1.3" fill="#8b7cf6"/>' +
@@ -118,7 +121,7 @@
     svg: svg(
       '-3.5 -4 16 16',
       'g{animation:b 1.1s steps(1,end) infinite;transform-origin:4.5px 4px}' +
-        '@keyframes b{0%,30%,60%,100%{transform:scale(1)}15%,45%{transform:scale(1.25)}}',
+        '@keyframes b{0%,30%,60%,100%{transform:scale(1)}15%,45%{transform:scale(1.4)}}',
       '<g>' +
         pixels(
           ['.XX...XX.', 'XoXX.XXXX', 'XXXXXXXXX', 'XXXXXXXXX', '.XXXXXXX.', '..XXXXX..', '...XXX...', '....X....'],
@@ -138,7 +141,7 @@
     svg: svg(
       '-2 -4.5 16 16',
       '.a{animation:a .9s steps(1,end) infinite}.b{animation:b .9s steps(1,end) infinite}' +
-        '@keyframes a{0%{transform:translateY(0);opacity:1}40%{transform:translateY(-3px);opacity:1}70%{transform:translateY(0);opacity:0}}' +
+        '@keyframes a{0%{transform:translateY(0);opacity:1}40%{transform:translateY(-4px);opacity:1}70%{transform:translateY(0);opacity:0}}' +
         '@keyframes b{0%{opacity:0}70%{opacity:1}}',
       '<g class="a">' +
         pixels(
@@ -159,8 +162,8 @@
     type: 'svg',
     svg: svg(
       '-4 -3 16 16',
-      'g{animation:f .5s steps(1,end) infinite;transform-origin:4px 5px}' +
-        '@keyframes f{0%{transform:scaleX(1)}50%{transform:scaleX(-1)}}',
+      'g{animation:f .7s steps(1,end) infinite;transform-origin:4px 10px}' +
+        '@keyframes f{0%{transform:scale(1,1)}25%{transform:scale(-1,1.1)}50%{transform:scale(1,.94)}75%{transform:scale(-1,1.06)}}',
       '<g>' +
         pixels(
           ['...X....', '..XX....', '..XXX...', '.XXXXX..', '.XXXXXX.', 'XXXyXXXX', 'XXyyyXXX', 'XXyyyyXX', '.XyyyyX.', '..XXXX..'],

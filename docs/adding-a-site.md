@@ -34,6 +34,18 @@ Create `src/adapters/<site>.js`:
     // Optional. The element holding filler status text to swap for the
     // user's phrases. Leave it out if the site shows no such text.
     label: '[data-loading="true"] .status-text',
+
+    // Optional. The row that contains the mark. The elapsed-time counter is
+    // drawn on its ::after, so it should be a flex or inline container.
+    row: '[data-loading="true"] .status-row',
+
+    // Optional. The element whose text describes the current activity.
+    // It is read, never changed, to pick an activity icon.
+    status: '[data-loading="true"] .status-text',
+
+    // Optional. Matches for the whole time a reply is in progress, including
+    // moments when the mark is not on screen. Keeps the counter running.
+    turn: '[data-streaming="true"]',
   });
 })();
 ```
@@ -42,6 +54,8 @@ Notes on `mark`:
 
 - It must be an element that can have a `::after`, so not an `<img>`, `<svg>` or `<input>`. If the animation is an `<svg>`, target its parent.
 - Everything directly inside it is hidden, so pick the smallest wrapper that contains only the animation.
+
+A CSS rule to keep in mind: `:has()` cannot be nested inside another `:has()`. If `mark` already uses `:has()`, write `row` as its own selector instead of wrapping `mark`. The Claude adapter shows the pattern.
 
 ## 3. Register it
 
@@ -52,6 +66,7 @@ In `manifest.json`, add the site to `content_scripts`:
 "js": [
   "src/core/defaults.js",
   "src/core/themes.js",
+  "src/core/activities.js",
   "src/core/css.js",
   "src/adapters/claude.js",
   "src/adapters/example.js",
@@ -78,3 +93,7 @@ Companions live in `src/core/themes.js`. There are two kinds:
 - `type: 'text'`: a `frames` array, an `interval` in milliseconds and a `width` in `em` equal to the widest frame.
 
 Give it an `id`, a `name` and the `pack` it belongs to. It then appears in the popup without further changes.
+
+## Adding an activity icon
+
+Activity icons live in `src/core/activities.js`. Each call to `add()` takes an id, a display name, a list of word beginnings and an SVG. The words are matched at the start of a word and ignore case, so `'read'` catches "Reading" and "read". Order matters: the first activity that matches wins, so put narrow activities before broad ones.

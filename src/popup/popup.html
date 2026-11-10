@@ -24,37 +24,82 @@
       <section class="preview" aria-label="Preview">
         <span class="pv-art" id="pvArt" aria-hidden="true"></span>
         <span class="pv-text" id="pvText"></span>
+        <span class="pv-time" id="pvTime"></span>
       </section>
 
-      <section>
-        <h2>Companion</h2>
-        <div class="tabs" id="tabs" role="tablist"></div>
-        <div class="grid" id="grid"></div>
-      </section>
+      <nav class="tabs views" id="views" role="tablist" aria-label="Settings sections">
+        <button type="button" role="tab" data-view="look" aria-selected="true">Companion</button>
+        <button type="button" role="tab" data-view="options" aria-selected="false">Options</button>
+      </nav>
 
-      <section>
-        <div class="row">
-          <h2>My phrases</h2>
-          <label class="switch small" title="Swap the filler status word for these phrases">
-            <input type="checkbox" id="swapText" />
-            <span></span>
-          </label>
-        </div>
-        <p class="hint">Shown in place of the filler status word. One per line.</p>
-        <textarea id="phrases" rows="3" spellcheck="false" aria-label="Custom phrases, one per line"></textarea>
-        <button class="link" id="reset" type="button">Restore default phrases</button>
-      </section>
+      <div id="view-look">
+        <section>
+          <div class="tabs" id="tabs" role="tablist" aria-label="Companion packs"></div>
+          <div class="grid" id="grid"></div>
+        </section>
 
-      <section>
-        <h2>Sites</h2>
-        <div id="sites"></div>
-      </section>
+        <section class="row">
+          <h2>Size</h2>
+          <div class="seg" id="size" role="radiogroup" aria-label="Companion size"></div>
+        </section>
+
+        <section>
+          <h2>Sites</h2>
+          <div id="sites"></div>
+        </section>
+      </div>
+
+      <div id="view-options" hidden>
+        <section class="card">
+          <div class="row">
+            <div>
+              <strong>Match the activity</strong>
+              <p class="hint">The icon follows what the AI is doing.</p>
+            </div>
+            <label class="switch small">
+              <input type="checkbox" id="adaptive" aria-label="Match the activity" />
+              <span></span>
+            </label>
+          </div>
+          <div class="strip" id="acts"></div>
+        </section>
+
+        <section class="card">
+          <div class="row">
+            <div>
+              <strong>Elapsed time</strong>
+              <p class="hint">Counts up while a reply loads.</p>
+            </div>
+            <label class="switch small">
+              <input type="checkbox" id="timer" aria-label="Elapsed time" />
+              <span></span>
+            </label>
+          </div>
+        </section>
+
+        <section class="card">
+          <div class="row">
+            <div>
+              <strong>My phrases</strong>
+              <p class="hint">Replace the filler word. One per line.</p>
+            </div>
+            <label class="switch small">
+              <input type="checkbox" id="swapText" aria-label="Use my phrases" />
+              <span></span>
+            </label>
+          </div>
+          <textarea id="phrases" rows="3" spellcheck="false" aria-label="Custom phrases, one per line"></textarea>
+          <button class="link" id="reset" type="button">Restore default phrases</button>
+        </section>
+
+      </div>
     </main>
 
     <footer>Changes apply instantly. Nothing leaves your browser.</footer>
 
     <script src="../core/defaults.js"></script>
     <script src="../core/themes.js"></script>
+    <script src="../core/activities.js"></script>
     <script src="../adapters/claude.js"></script>
     <script src="popup.js"></script>
   </body>
