@@ -1,0 +1,13 @@
+{
+  "name": "waitlings",
+  "description": "Waitlings: animated loading companions for the Claude app.",
+  "owner": {
+    "name": "Aneesh Kumar"
+  },
+  "plugins": [
+    {
+      "name": "waitlings",
+      "source": "./mod"
+    }
+  ]
+}

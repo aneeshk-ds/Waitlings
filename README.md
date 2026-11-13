@@ -2,7 +2,10 @@
 
 A browser extension that swaps the loading indicator in AI chat apps for a small animated companion and your own status phrases.
 
-Version 0.2.0 supports Claude (claude.ai). ChatGPT and Gemini are next on the roadmap.
+Version 0.2.0 comes in two forms that share the same artwork:
+
+- **Browser extension** for claude.ai in Chrome, Brave, Edge and other Chromium browsers. ChatGPT and Gemini are next on the roadmap.
+- **Claude app plugin** for the Claude desktop app (Cowork and Claude Code sessions). See [Claude app plugin](#claude-app-plugin).
 
 <img src="docs/popup.png" alt="Waitlings popup, Companion view" width="300"> <img src="docs/popup-options.png" alt="Waitlings popup, Options view" width="300">
 
@@ -32,7 +35,23 @@ Waitlings is not on the Chrome Web Store yet. It loads directly from this folder
 
 To update later, pull or download the new code and click the reload arrow on the Waitlings card on the extensions page.
 
+## Claude app plugin
+
+Browser extensions cannot reach the Claude desktop app, so the app has its own version in the [`mod/`](mod) folder. It uses the app's plugin system to draw the companion in place of the loading row, and it picks activity icons from the tool that is running, which is more exact than matching words.
+
+Install it one of two ways:
+
+- **In the desktop app:** click + next to the prompt box, then Plugins, then Add marketplace, and enter `aneeshk-ds/waitlings`. Then choose Add plugin.
+- **In a terminal session:**
+  ```
+  /plugin install waitlings --marketplace aneeshk-ds/waitlings
+  ```
+
+Then type `/waitlings` to open its settings. Details are in [mod/README.md](mod/README.md).
+
 ## Use
+
+The rest of this page covers the browser extension.
 
 Click the Waitlings icon in the browser toolbar (pin it from the puzzle-piece menu if it is hidden).
 
@@ -93,6 +112,9 @@ src/
   adapters/
     claude.js      selectors for claude.ai
   popup/           the settings popup
+mod/               the Claude app plugin (TypeScript hooks module, tests)
+tools/
+  sync-mod-art.js  regenerates mod/hooks/art.ts from src/core
 docs/
   adding-a-site.md
 ```
@@ -107,7 +129,7 @@ docs/
 ## Known limits
 
 - **Sites change.** No AI app offers an official way to restyle its loading indicator, so each adapter depends on the site's current markup. When a site ships a redesign the companion may stop appearing until the adapter's selectors are updated. Nothing else breaks: the site falls back to its normal indicator.
-- **Browser only.** Desktop and mobile apps cannot load browser extensions.
+- **The extension is browser only.** The desktop app is covered by the plugin in `mod/`. The mobile app is not covered by either.
 - **Claude coverage.** Verified on the claude.ai chat view. Other views may use different markup and are not covered yet.
 - **Activity matching is by keyword, in English.** Status lines are free text written by the model, so some will match the wrong icon or none. Unmatched lines show your companion.
 - **The counter is Waitlings' own clock.** It starts when the loading icon first appears, so it can differ from a site's own figure by about a second.

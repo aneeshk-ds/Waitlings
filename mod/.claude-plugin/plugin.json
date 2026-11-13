@@ -1,0 +1,10 @@
+{
+  "name": "waitlings",
+  "version": "0.2.0",
+  "description": "Draws a small animated companion in place of the loading row while Claude works, with your own phrases, an icon that follows the activity and an elapsed-time counter.",
+  "license": "MIT",
+  "types": "./types/index.d.ts",
+  "author": {
+    "name": "Aneesh Kumar"
+  }
+}
